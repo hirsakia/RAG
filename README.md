@@ -44,7 +44,7 @@ Note: This version highlights a common vulnerability in LLM-based routing where 
 
 A robust, production-ready architecture fixing V3's routing bugs and implementing advanced Anthropic/Self-RAG techniques.
 
-** Contextual Chunking (Anthropic Technique): Prepend an LLM-generated summary of the parent document to each chunk before embedding. This provides global context and reduces "lost in the middle" retrieval failures.
+- Contextual Chunking (Anthropic Technique): Prepend an LLM-generated summary of the parent document to each chunk before embedding. This provides global context and reduces "lost in the middle" retrieval failures.
 
 - Upgraded Embeddings: Swapped to BAAI/bge-base-en-v1.5 and added persistent ChromaDB storage to skip rebuilding on subsequent runs.
 
