@@ -8,7 +8,7 @@ All processing, including embeddings, vector storage, and Large Language Model (
 
 The foundational ETL (Extract, Transform, Load) pipeline and an LCEL-based (LangChain Expression Language) conversational chain.
 
-Ingestion: Parses unstructured text (.txt) and digital PDFs using LangChain's DirectoryLoader.
+* Ingestion: Parses unstructured text (.txt) and digital PDFs using LangChain's DirectoryLoader.
 
 Chunking: RecursiveCharacterTextSplitter ensures logical semantic breaks.
 
