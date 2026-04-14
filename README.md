@@ -8,35 +8,35 @@ All processing, including embeddings, vector storage, and Large Language Model (
 
 The foundational ETL (Extract, Transform, Load) pipeline and an LCEL-based (LangChain Expression Language) conversational chain.
 
-** Ingestion: Parses unstructured text (.txt) and digital PDFs using LangChain's DirectoryLoader.
+- Ingestion: Parses unstructured text (.txt) and digital PDFs using LangChain's DirectoryLoader.
 
-** Chunking: RecursiveCharacterTextSplitter ensures logical semantic breaks.
+- Chunking: RecursiveCharacterTextSplitter ensures logical semantic breaks.
 
-** Vector Store: In-memory ChromaDB using lightweight HuggingFace embeddings (all-MiniLM-L6-v2).
+- Vector Store: In-memory ChromaDB using lightweight HuggingFace embeddings (all-MiniLM-L6-v2).
 
-** Memory: Implements a chat history buffer to maintain context across multi-turn conversations (e.g., resolving pronouns).
+- Memory: Implements a chat history buffer to maintain context across multi-turn conversations (e.g., resolving pronouns).
 
-** Grounding: Strict prompt engineering ensures the LLM cites source filenames.
+- Grounding: Strict prompt engineering ensures the LLM cites source filenames.
 
 ### V2: Advanced Retrieval & Agentic Routing
 
 Introduces LangGraph to transform the static chain into a dynamic state machine, significantly improving retrieval accuracy.
 
-** Hybrid Search: Combines dense semantic search (ChromaDB) with sparse keyword search (BM25) to catch exact matches and conceptual overlaps.
+- Hybrid Search: Combines dense semantic search (ChromaDB) with sparse keyword search (BM25) to catch exact matches and conceptual overlaps.
 
-** Query Transformations: * Contextualization: Rewrites follow-up questions into standalone queries before searching.
+- Query Transformations: * Contextualization: Rewrites follow-up questions into standalone queries before searching.
 
-** Expansion: Generates 3 related search queries to broaden recall.
+- Expansion: Generates 3 related search queries to broaden recall.
 
-** Reranking: Utilizes the FlashRank cross-encoder (ms-marco-MultiBERT-L-12) to select the top 4 most relevant chunks from the expanded search pool.
+- Reranking: Utilizes the FlashRank cross-encoder (ms-marco-MultiBERT-L-12) to select the top 4 most relevant chunks from the expanded search pool.
 
 ### V3: Multi-modal Routing (SQL + Docs)
 
 Adds structured data querying by integrating a PostgreSQL database, introducing complex routing challenges.
 
-** LLM Routing: The graph dynamically decides whether to query the vector database (unstructured) or write SQL (structured) based on the user's prompt.
+- LLM Routing: The graph dynamically decides whether to query the vector database (unstructured) or write SQL (structured) based on the user's prompt.
 
-** Text-to-SQL: Automatically generates and executes PostgreSQL queries against a local database.
+- Text-to-SQL: Automatically generates and executes PostgreSQL queries against a local database.
 
 Note: This version highlights a common vulnerability in LLM-based routing where topic overlap (e.g., "Deep Learning" as a course name vs. a research paper topic) causes incorrect pathing.
 
@@ -46,28 +46,28 @@ A robust, production-ready architecture fixing V3's routing bugs and implementin
 
 ** Contextual Chunking (Anthropic Technique): Prepend an LLM-generated summary of the parent document to each chunk before embedding. This provides global context and reduces "lost in the middle" retrieval failures.
 
-** Upgraded Embeddings: Swapped to BAAI/bge-base-en-v1.5 and added persistent ChromaDB storage to skip rebuilding on subsequent runs.
+- Upgraded Embeddings: Swapped to BAAI/bge-base-en-v1.5 and added persistent ChromaDB storage to skip rebuilding on subsequent runs.
 
-** Semantic Router: Replaced the unreliable LLM router with an embedding-based cosine-similarity router, completely fixing V3's routing bug.
+- Semantic Router: Replaced the unreliable LLM router with an embedding-based cosine-similarity router, completely fixing V3's routing bug.
 
-** Self-RAG (Quality Control):
+- Self-RAG (Quality Control):
 
-*** Doc Grader: Filters out irrelevant retrieved chunks before reranking.
+  - Doc Grader: Filters out irrelevant retrieved chunks before reranking.
 
-*** Answer Grader: Checks the final output for hallucinations (e.g., if the LLM admits ignorance). If retrieval fails, the graph loops back and automatically retries.
+- Answer Grader: Checks the final output for hallucinations (e.g., if the LLM admits ignorance). If retrieval fails, the graph loops back and automatically retries.
 
 ## 🛠️ Technology Stack
-** Orchestration: LangChain, LangGraph
++ Orchestration: LangChain, LangGraph
 
-** Local LLM: Ollama (llama3.2 for text generation, llama3.1:8b for SQL generation)
++ Local LLM: Ollama (llama3.2 for text generation, llama3.1:8b for SQL generation)
 
-** Embeddings: HuggingFace (BAAI/bge-base-en-v1.5, all-MiniLM-L6-v2)
++ Embeddings: HuggingFace (BAAI/bge-base-en-v1.5, all-MiniLM-L6-v2)
 
-** Vector Database: ChromaDB
++ Vector Database: ChromaDB
 
-** Relational Database: PostgreSQL (psycopg2)
++ Relational Database: PostgreSQL (psycopg2)
 
-** Reranker: FlashRank
++ Reranker: FlashRank
 
 ## ⚙️ Setup & Installation
 1. Clone the repository and set up a virtual environment:
